@@ -58,6 +58,27 @@ export type SubmitResult =
   | { ok: true; message: string }
   | { ok: false; message: string }
 
+/**
+ * Reduces "+91 98765-43210", "091 9876543210" and "9876543210" to the bare
+ * 10-digit subscriber number, so formatting differences never reach the CRM.
+ */
+export function normalizeMobile(value: string) {
+  const digits = value.replace(/\D/g, '')
+  if (digits.length === 12 && digits.startsWith('91')) return digits.slice(2)
+  if (digits.length === 11 && digits.startsWith('0')) return digits.slice(1)
+  return digits
+}
+
+/** Indian mobile numbers are ten digits starting 6–9. The form is India-only. */
+export function isValidMobile(value: string) {
+  return /^[6-9]\d{9}$/.test(normalizeMobile(value))
+}
+
+/** Canonical shape stored on the contact, so click-to-dial and dedupe behave. */
+export function formatMobile(value: string) {
+  return `+91 ${normalizeMobile(value)}`
+}
+
 /** Mirrors Zoho's own loose email check so we reject exactly what it would. */
 export function isValidEmail(value: string) {
   const at = value.indexOf('@')

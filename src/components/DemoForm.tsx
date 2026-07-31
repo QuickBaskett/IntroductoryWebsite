@@ -3,8 +3,10 @@ import { cn } from '../lib/cn'
 import { DEMO_FALLBACK_EMAIL } from '../lib/config'
 import {
   FIELD,
+  formatMobile,
   INDIA_STATES,
   isValidEmail,
+  isValidMobile,
   stateLabel,
   submitToZoho,
 } from '../lib/zohoForm'
@@ -53,7 +55,10 @@ export function DemoForm() {
     const next: Errors = {}
     if (!values[FIELD.firstName].trim()) next[FIELD.firstName] = 'First name is required'
     if (!values[FIELD.lastName].trim()) next[FIELD.lastName] = 'Last name is required'
-    if (!values[FIELD.mobile].trim()) next[FIELD.mobile] = 'Mobile number is required'
+    const mobile = values[FIELD.mobile].trim()
+    if (!mobile) next[FIELD.mobile] = 'Mobile number is required'
+    else if (!isValidMobile(mobile))
+      next[FIELD.mobile] = 'Enter a valid 10-digit Indian mobile number'
     if (!values[FIELD.city].trim()) next[FIELD.city] = 'City is required'
     if (!values[FIELD.state]) next[FIELD.state] = 'Please pick a state'
     const email = values[FIELD.email].trim()
@@ -68,7 +73,10 @@ export function DemoForm() {
     setFailure(null)
     if (!validate()) return
     setBusy(true)
-    const result = await submitToZoho(values)
+    const result = await submitToZoho({
+      ...values,
+      [FIELD.mobile]: formatMobile(values[FIELD.mobile]),
+    })
     setBusy(false)
     if (result.ok) setDone(result.message)
     else setFailure(result.message)
