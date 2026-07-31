@@ -1,0 +1,303 @@
+import { useMemo, useState } from 'react'
+import { INDIA_STATES, INDIA_VIEWBOX, projectIndia } from '../lib/indiaMap'
+import {
+  NETWORK_ACTIVE_STORES,
+  NETWORK_CITIES,
+  NETWORK_LIVE,
+  NETWORK_PROOF,
+  NETWORK_TOTAL,
+} from '../lib/content'
+import { SectionHeading } from './SectionHeading'
+import { Reveal } from './Reveal'
+import { useInView } from '../hooks/useInView'
+import { cn } from '../lib/cn'
+
+/* Animation timeline (ms after the map scrolls into view) */
+const STATE_STAGGER = 16
+const MARKERS_AT = 480
+const ARCS_AT = 760
+const ARC_STAGGER = 110
+
+type Tip = { x: number; y: number; title: string; sub?: string }
+
+/** Departure point for the route arcs — the Uttarakhand cluster. */
+const HUB = { lat: 30.18, lng: 78.2 }
+
+function arcPath(x1: number, y1: number, x2: number, y2: number) {
+  const dx = x2 - x1
+  const dy = y2 - y1
+  const d = Math.hypot(dx, dy) || 1
+  // bow outward, flipping side so west- and east-bound arcs both bulge away
+  const bow = Math.max(14, d * 0.18) * (dx < 0 ? 1 : -1)
+  const cx = x1 + dx / 2 + (-dy / d) * bow
+  const cy = y1 + dy / 2 + (dx / d) * bow
+  return `M${x1} ${y1}Q${cx} ${cy} ${x2} ${y2}`
+}
+
+export function StoreNetwork() {
+  const { ref, inView } = useInView<HTMLDivElement>()
+  const [tip, setTip] = useState<Tip | null>(null)
+  const { w, h } = INDIA_VIEWBOX
+
+  const live = useMemo(
+    () => NETWORK_LIVE.map((c) => ({ ...c, ...projectIndia(c.lat, c.lng) })),
+    [],
+  )
+  const cities = useMemo(
+    () => NETWORK_CITIES.map((c) => ({ ...c, ...projectIndia(c.lat, c.lng) })),
+    [],
+  )
+  const hub = projectIndia(HUB.lat, HUB.lng)
+  const maxOutlets = Math.max(...NETWORK_LIVE.map((c) => c.outlets))
+
+  return (
+    <section
+      id="network"
+      className="mx-auto max-w-[1200px] px-[clamp(1.1rem,4vw,2.6rem)] py-[clamp(5rem,11vw,9rem)]"
+    >
+      <SectionHeading
+        center
+        kicker="Our Network"
+        title={
+          <>
+            Rooted in Uttarakhand.
+            <br />
+            Growing across India.
+          </>
+        }
+        lede={`${NETWORK_ACTIVE_STORES} stores are already active across India. Our three home district clusters in Uttarakhand — ${NETWORK_TOTAL} outlets on OMC forecourts, highways and tourist routes — are mapped below, with new locations coming online every month.`}
+      />
+
+      <div ref={ref} className={cn('mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1.05fr]', inView && 'in-view')}>
+        {/* ── Left: live district clusters ── */}
+        <div className="flex flex-col gap-4">
+          {live.map((c, i) => (
+            <Reveal key={c.name} delay={i * 90}>
+              <article
+                className="rounded-2xl border border-black/[0.07] bg-panel p-6 shadow-[0_18px_44px_-30px_rgba(11,61,30,0.28)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-acid/25"
+                onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: `${c.outlets} outlets live` })}
+                onMouseLeave={() => setTip(null)}
+              >
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="font-display text-[1.15rem] font-bold">{c.name}</h3>
+                  <span className="font-mono text-[0.95rem] font-bold whitespace-nowrap text-acid">
+                    {c.outlets} <span className="text-[0.7rem] font-normal tracking-[0.1em] text-fg3 uppercase">outlets</span>
+                  </span>
+                </div>
+                <p className="mt-1 text-[0.88rem] text-fg2">{c.sub}</p>
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-ink3">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-acid to-aqua transition-[width] duration-1000 ease-[cubic-bezier(.22,1,.36,1)]"
+                    style={{
+                      width: inView ? `${(c.outlets / maxOutlets) * 100}%` : '0%',
+                      transitionDelay: `${300 + i * 140}ms`,
+                    }}
+                  />
+                </div>
+              </article>
+            </Reveal>
+          ))}
+
+          {/* legend */}
+          <Reveal delay={300} className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 px-1 text-[0.82rem] text-fg2">
+            <span className="flex items-center gap-2">
+              <span className="relative flex size-2.5">
+                <span className="absolute inline-flex size-full animate-pulse-dot rounded-full bg-acid" />
+              </span>
+              Live outlet cluster
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="inline-flex size-2.5 rounded-full bg-gold" />
+              Active &amp; growing across India
+            </span>
+          </Reveal>
+        </div>
+
+        {/* ── Right: the map ── */}
+        <Reveal delay={120}>
+          <div className="relative mx-auto w-full max-w-[560px]">
+            <svg
+              viewBox={`0 0 ${w} ${h}`}
+              className="block h-auto w-full overflow-visible"
+              role="img"
+              aria-label={`Map of India showing ${NETWORK_TOTAL} live QuickBasket outlets in Uttarakhand and new locations opening across the country`}
+            >
+              {/* states assemble in with a soft stagger */}
+              <g>
+                {INDIA_STATES.map((s, i) => {
+                  const isUk = s.id === 'uttarakhand'
+                  return (
+                    <path
+                      key={s.id}
+                      d={s.d}
+                      className={cn('map-state', !isUk && 'hover:fill-[#eef0e2]')}
+                      style={{ transitionDelay: `${i * STATE_STAGGER}ms` }}
+                      fill={isUk ? '#d3ecda' : '#f1eee2'}
+                      stroke={isUk ? 'rgba(10,138,52,0.45)' : '#fcfbf6'}
+                      strokeWidth={isUk ? 1.4 : 0.8}
+                      strokeLinejoin="round"
+                    >
+                      <title>{s.name}</title>
+                    </path>
+                  )
+                })}
+              </g>
+
+              {/* route arcs out of Uttarakhand */}
+              <g fill="none">
+                {cities.map((c, i) => {
+                  const d = arcPath(hub.x, hub.y, c.x, c.y)
+                  return (
+                    <g key={c.name}>
+                      <path
+                        d={d}
+                        pathLength={1}
+                        className="map-arc"
+                        style={{ transitionDelay: `${ARCS_AT + i * ARC_STAGGER}ms` }}
+                        stroke="rgba(245,138,26,0.35)"
+                        strokeWidth={1.4}
+                      />
+                      {inView && (
+                        <path
+                          d={d}
+                          pathLength={1}
+                          className="map-flow"
+                          style={{ animationDelay: `${ARCS_AT + i * ARC_STAGGER + 900}ms` }}
+                          stroke="rgba(245,138,26,0.8)"
+                          strokeWidth={1.6}
+                          strokeLinecap="round"
+                        />
+                      )}
+                    </g>
+                  )
+                })}
+              </g>
+
+              {/* upcoming city markers */}
+              {inView && (
+                <g>
+                  {cities.map((c, i) => (
+                    <g
+                      key={c.name}
+                      onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: 'Active & growing' })}
+                      onMouseLeave={() => setTip(null)}
+                      className="cursor-pointer"
+                    >
+                      <circle
+                        cx={c.x}
+                        cy={c.y}
+                        r={4.4}
+                        className="map-pop"
+                        style={{ animationDelay: `${ARCS_AT + i * ARC_STAGGER + 950}ms` }}
+                        fill="#f58a1a"
+                        stroke="#fff"
+                        strokeWidth={1.6}
+                      />
+                      {/* generous invisible hit area */}
+                      <circle cx={c.x} cy={c.y} r={13} fill="transparent" />
+                    </g>
+                  ))}
+                </g>
+              )}
+
+              {/* live Uttarakhand cluster markers */}
+              {inView && (
+                <g>
+                  {live.map((c, i) => (
+                    <g
+                      key={c.name}
+                      onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: `${c.outlets} outlets live` })}
+                      onMouseLeave={() => setTip(null)}
+                      className="cursor-pointer"
+                    >
+                      <circle
+                        cx={c.x}
+                        cy={c.y}
+                        r={6}
+                        className="map-ping"
+                        style={{ animationDelay: `${MARKERS_AT + i * 160}ms` }}
+                        fill="none"
+                        stroke="#0a8a34"
+                        strokeWidth={1.2}
+                      />
+                      <circle
+                        cx={c.x}
+                        cy={c.y}
+                        r={5}
+                        className="map-pop"
+                        style={{ animationDelay: `${MARKERS_AT + i * 160}ms` }}
+                        fill="#0a8a34"
+                        stroke="#fff"
+                        strokeWidth={1.8}
+                      />
+                      <circle cx={c.x} cy={c.y} r={13} fill="transparent" />
+                    </g>
+                  ))}
+                </g>
+              )}
+
+              {/* cluster callout — too small to read once the map shrinks below ~sm */}
+              {inView && (
+                <g
+                  className="map-pop hidden sm:block"
+                  style={{ animationDelay: `${MARKERS_AT + 420}ms` }}
+                  pointerEvents="none"
+                >
+                  <line
+                    x1={hub.x + 22}
+                    y1={hub.y - 26}
+                    x2={hub.x + 8}
+                    y2={hub.y - 8}
+                    stroke="rgba(10,138,52,0.5)"
+                    strokeWidth={1}
+                  />
+                  <g transform={`translate(${hub.x + 22}, ${hub.y - 56})`}>
+                    <rect width={158} height={34} rx={17} fill="#0a8a34" />
+                    <text
+                      x={79}
+                      y={22}
+                      textAnchor="middle"
+                      fill="#fff"
+                      style={{ font: '700 13.5px Manrope, sans-serif' }}
+                    >
+                      Uttarakhand · {NETWORK_TOTAL} live
+                    </text>
+                  </g>
+                </g>
+              )}
+            </svg>
+
+            {/* hover tooltip */}
+            <div
+              className={cn(
+                'pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-xl border border-black/[0.07] bg-panel px-3.5 py-2 whitespace-nowrap shadow-[0_14px_30px_-14px_rgba(11,61,30,0.35)] transition-opacity duration-200',
+                tip ? 'opacity-100' : 'opacity-0',
+              )}
+              style={{
+                left: `${((tip?.x ?? 0) / w) * 100}%`,
+                top: `calc(${((tip?.y ?? 0) / h) * 100}% - 12px)`,
+              }}
+            >
+              <div className="text-[0.85rem] font-bold text-fg">{tip?.title}</div>
+              {tip?.sub && <div className="font-mono text-[0.7rem] text-acid3">{tip.sub}</div>}
+            </div>
+
+            <p className="mt-3 text-center text-[0.74rem] text-fg3">
+              City markers are representative as new locations come online.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+
+      {/* proof strip */}
+      <Reveal delay={120} className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-black/[0.07] bg-black/[0.06] sm:grid-cols-3">
+        {NETWORK_PROOF.map((p) => (
+          <div key={p.t} className="bg-ink2 px-6 py-6 text-center">
+            <div className="font-display text-[1.6rem] font-bold text-acid">{p.b}</div>
+            <div className="mt-1 text-[0.85rem] text-fg2">{p.t}</div>
+          </div>
+        ))}
+      </Reveal>
+    </section>
+  )
+}
