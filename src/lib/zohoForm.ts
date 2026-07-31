@@ -2,11 +2,11 @@
    Zoho CRM Web-to-Contact wiring.
 
    Values below come straight from the webform snippet Zoho generated
-   (Setup → Developer Space → Webforms → Contact Us). They identify the
-   org and the form; they are public by design — every site that hosts a
-   Zoho webform exposes them in its page source. The gate against abuse
-   is the domain whitelist in the form's own Zoho settings, so
-   quickbasket.org must be registered there.
+   (Setup → Channels → Webforms → Contact Us). They identify the org and
+   the form; they are public by design — every site that hosts a Zoho
+   webform exposes them in its page source. The gate against abuse is the
+   **Form location URL** field under that form's Form Details, so
+   quickbasket.org must be listed there or Zoho drops the submission.
 
    Regenerating the form in Zoho changes xmIwtLD — re-copy it here.
    ══════════════════════════════════════════════════════════════ */
