@@ -37,20 +37,25 @@ catalogs**:
 
 ## Request a demo → Zoho form
 
-Every "Request a demo" button (nav + closing CTA) opens a modal that embeds the Zoho
-form. Paste the form URL into **one** place — `ZOHO_DEMO_FORM_URL` in `src/lib/config.ts`:
+Every "Request a demo" button (nav + mobile drawer + closing CTA) opens a modal
+containing a **native React form** that POSTs straight to Zoho CRM's Web-to-Contact
+endpoint. There's no iframe: a CRM webform has no hosted permalink (that's Zoho
+*Forms*), only an HTML snippet, so the form is rebuilt in the site's own design
+system and the record lands in the **Contacts** module.
 
-- **Zoho CRM** → Setup → Developer Space → Webforms → your form → Share/Embed, and copy
-  the `src="…"` out of the `<iframe>` snippet.
-- **Zoho Forms** → your form → Share → Permalink.
+- `src/lib/zohoForm.ts` — endpoint, the hidden fields Zoho requires (`xnQsjsdp`,
+  `xmIwtLD`, `actionType`, `returnURL`, honeypot), the exact India State picklist
+  values, and `submitToZoho()` which interprets Zoho's JSON reply.
+- `src/components/DemoForm.tsx` — the styled form, inline validation, success state.
+- `src/components/DemoDialog.tsx` — the modal shell (Esc / backdrop / × to close).
 
-Then, in the Zoho form's own settings, whitelist the site's domain and set the
-post-submit **Return URL** back to the site.
+**Regenerating the form in Zoho changes `xmIwtLD`** — re-copy it into `zohoForm.ts`.
+Those identifiers are public by design; the actual protection is the domain whitelist
+in the Zoho form's settings, so **quickbasket.org must be registered there** or Zoho
+rejects the cross-origin POST.
 
-Until that constant is filled in, the same buttons fall back to a `mailto:` link
-(`DEMO_FALLBACK_EMAIL`), so nothing is ever a dead link. The modal closes on Esc,
-backdrop click, or the × button, and carries an "open in a new tab" escape hatch in
-case the iframe is blocked.
+On success the modal shows Zoho's own splash/thank-you text (`actionvalue`). If the
+request can't reach Zoho, an inline error offers `DEMO_FALLBACK_EMAIL` instead.
 
 ## Stack
 
