@@ -73,7 +73,7 @@ export function Nav() {
 
       <div className="hidden items-center gap-2.5 lg:flex">
         <DemoTrigger className="rounded-full bg-gold px-5 py-2.5 text-[0.9rem] font-bold text-white shadow-[0_10px_26px_-8px_rgba(245,138,26,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold2">
-          Request Demo
+          Contact Us
         </DemoTrigger>
       </div>
 
@@ -115,7 +115,7 @@ export function Nav() {
             onClick={() => setOpen(false)}
             className="mt-2 rounded-full bg-gold px-5 py-3 text-center font-bold text-white"
           >
-            Request Demo
+            Contact Us
           </DemoTrigger>
         </nav>
       </div>

@@ -62,7 +62,7 @@ export function DemoDialog() {
               id="demo-dialog-title"
               className="font-display text-[1.5rem] leading-tight font-semibold tracking-[-0.02em]"
             >
-              Request a demo
+              Contact Us
             </h3>
             <p className="mt-1 text-[0.9rem] text-fg2">
               Tell us about your stores — our team gets back within one working day.

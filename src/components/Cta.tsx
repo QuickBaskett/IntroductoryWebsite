@@ -21,7 +21,7 @@ export function Cta() {
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button {...demoTriggerProps()} size="lg">
-            Request a demo <Arrow />
+            Contact Us <Arrow />
           </Button>
           <Button href="#top" size="lg" variant="ghost">
             Back to top

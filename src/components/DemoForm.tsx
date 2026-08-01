@@ -227,7 +227,7 @@ export function DemoForm() {
           busy ? 'cursor-not-allowed opacity-70' : 'hover:-translate-y-0.5 hover:bg-gold2',
         )}
       >
-        {busy ? 'Sending…' : 'Request a demo'}
+        {busy ? 'Sending…' : 'Send message'}
       </button>
 
       <p className="text-center text-[0.72rem] text-fg3">
