@@ -177,8 +177,8 @@ export const STRATEGIC_PARTNERS: Partner[] = [
   },
   {
     name: 'STPI',
-    kind: 'Technology',
-    note: 'Software Technology Parks of India — technology and incubation support.',
+    kind: 'Campus space',
+    note: 'Cafeteria space inside Software Technology Parks of India buildings.',
     logo: asset('stpi-logo.svg'),
   },
   {
