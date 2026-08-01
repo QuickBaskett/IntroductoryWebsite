@@ -1,4 +1,4 @@
-import { OMC_PARTNERS, OMC_PROOF } from '../lib/content'
+import { OMC_PARTNERS, OMC_PROOF, STRATEGIC_PARTNERS } from '../lib/content'
 import { SectionHeading } from './SectionHeading'
 import { Reveal } from './Reveal'
 
@@ -48,6 +48,40 @@ export function OmcPartners() {
           </div>
         ))}
       </Reveal>
+
+      {/* ── Strategic partners — the brands behind the shelves ── */}
+      <Reveal delay={80} className="mt-20 text-center">
+        <p className="inline-flex items-center justify-center gap-2.5 font-mono text-[0.72rem] tracking-[0.2em] text-fg2 uppercase">
+          <span className="size-[7px] rounded-full bg-gold shadow-[0_0_10px_var(--color-gold)]" />
+          Strategic Partners
+        </p>
+        <h3 className="mt-4 font-display text-[clamp(1.7rem,3.4vw,2.5rem)] leading-[1.08] font-semibold tracking-[-0.02em]">
+          The brands behind the shelves.
+        </h3>
+        <p className="mx-auto mt-3 max-w-[56ch] text-[1rem] text-fg2">
+          Forecourt real estate is only half the story. These are the manufacturing and
+          brand partners who keep every QuickBasket stocked with what shoppers actually
+          reach for.
+        </p>
+      </Reveal>
+
+      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {STRATEGIC_PARTNERS.map((p, i) => (
+          <Reveal key={p.name} delay={i * 70}>
+            <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-panel p-6 shadow-[0_18px_44px_-30px_rgba(11,61,30,0.28)] transition-[transform,border-color] duration-300 hover:-translate-y-1.5 hover:border-gold/35">
+              <div className="mb-5 flex h-20 items-center justify-center rounded-xl border border-black/[0.05] bg-gradient-to-b from-white to-ink2 px-4">
+                <span className="text-center font-display text-[1.12rem] leading-tight font-bold tracking-[-0.02em] text-fg">
+                  {p.name}
+                </span>
+              </div>
+              <span className="mb-2 inline-block font-mono text-[0.64rem] font-bold tracking-[0.14em] text-gold uppercase">
+                {p.kind}
+              </span>
+              <p className="text-[0.88rem] text-fg2">{p.note}</p>
+            </article>
+          </Reveal>
+        ))}
+      </div>
     </section>
   )
 }

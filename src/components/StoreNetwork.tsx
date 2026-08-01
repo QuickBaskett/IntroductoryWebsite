@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react'
 import { INDIA_STATES, INDIA_VIEWBOX, projectIndia } from '../lib/indiaMap'
 import {
   NETWORK_ACTIVE_STORES,
-  NETWORK_CITIES,
   NETWORK_LIVE,
   NETWORK_PROOF,
+  NETWORK_STATE_COUNT,
   NETWORK_TOTAL,
 } from '../lib/content'
 import { SectionHeading } from './SectionHeading'
@@ -20,8 +20,11 @@ const ARC_STAGGER = 110
 
 type Tip = { x: number; y: number; title: string; sub?: string }
 
-/** Departure point for the route arcs — the Uttarakhand cluster. */
+/** Departure point for the route arcs — the Uttarakhand home base. */
 const HUB = { lat: 30.18, lng: 78.2 }
+
+/** Live-state fills, so the six trading states read as one shaded region. */
+const LIVE_IDS = new Set(NETWORK_LIVE.map((s) => s.id))
 
 function arcPath(x1: number, y1: number, x2: number, y2: number) {
   const dx = x2 - x1
@@ -43,10 +46,8 @@ export function StoreNetwork() {
     () => NETWORK_LIVE.map((c) => ({ ...c, ...projectIndia(c.lat, c.lng) })),
     [],
   )
-  const cities = useMemo(
-    () => NETWORK_CITIES.map((c) => ({ ...c, ...projectIndia(c.lat, c.lng) })),
-    [],
-  )
+  // arcs run from the home base out to every other live state
+  const spokes = useMemo(() => live.slice(1), [live])
   const hub = projectIndia(HUB.lat, HUB.lng)
   const maxOutlets = Math.max(...NETWORK_LIVE.map((c) => c.outlets))
 
@@ -62,35 +63,35 @@ export function StoreNetwork() {
           <>
             Rooted in Uttarakhand.
             <br />
-            Growing across India.
+            Live in {NETWORK_STATE_COUNT} states.
           </>
         }
-        lede={`${NETWORK_ACTIVE_STORES} stores are already active across India. Our three home district clusters in Uttarakhand — ${NETWORK_TOTAL} outlets on OMC forecourts, highways and tourist routes — are mapped below, with new locations coming online every month.`}
+        lede={`${NETWORK_ACTIVE_STORES} stores are already trading across ${NETWORK_STATE_COUNT} states — from our Uttarakhand home base out to Delhi/NCR and as far south as Telangana — on OMC forecourts, highways and tourist routes, with new locations coming online every month.`}
       />
 
       <div ref={ref} className={cn('mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1.05fr]', inView && 'in-view')}>
-        {/* ── Left: live district clusters ── */}
-        <div className="flex flex-col gap-4">
+        {/* ── Left: the live states, most outlets first ── */}
+        <div className="flex flex-col gap-3">
           {live.map((c, i) => (
-            <Reveal key={c.name} delay={i * 90}>
+            <Reveal key={c.name} delay={i * 60}>
               <article
-                className="rounded-2xl border border-black/[0.07] bg-panel p-6 shadow-[0_18px_44px_-30px_rgba(11,61,30,0.28)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-acid/25"
+                className="rounded-2xl border border-black/[0.07] bg-panel px-5 py-4 shadow-[0_18px_44px_-30px_rgba(11,61,30,0.28)] transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-acid/25"
                 onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: `${c.outlets} outlets live` })}
                 onMouseLeave={() => setTip(null)}
               >
                 <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="font-display text-[1.15rem] font-bold">{c.name}</h3>
+                  <h3 className="font-display text-[1.08rem] font-bold">{c.name}</h3>
                   <span className="font-mono text-[0.95rem] font-bold whitespace-nowrap text-acid">
                     {c.outlets} <span className="text-[0.7rem] font-normal tracking-[0.1em] text-fg3 uppercase">outlets</span>
                   </span>
                 </div>
-                <p className="mt-1 text-[0.88rem] text-fg2">{c.sub}</p>
-                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-ink3">
+                <p className="mt-0.5 text-[0.84rem] text-fg2">{c.sub}</p>
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink3">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-acid to-aqua transition-[width] duration-1000 ease-[cubic-bezier(.22,1,.36,1)]"
                     style={{
                       width: inView ? `${(c.outlets / maxOutlets) * 100}%` : '0%',
-                      transitionDelay: `${300 + i * 140}ms`,
+                      transitionDelay: `${300 + i * 110}ms`,
                     }}
                   />
                 </div>
@@ -99,16 +100,16 @@ export function StoreNetwork() {
           ))}
 
           {/* legend */}
-          <Reveal delay={300} className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 px-1 text-[0.82rem] text-fg2">
+          <Reveal delay={300} className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-2 px-1 text-[0.82rem] text-fg2">
             <span className="flex items-center gap-2">
               <span className="relative flex size-2.5">
                 <span className="absolute inline-flex size-full animate-pulse-dot rounded-full bg-acid" />
               </span>
-              Live outlet cluster
+              Live state — marker scales with outlet count
             </span>
             <span className="flex items-center gap-2">
-              <span className="inline-flex size-2.5 rounded-full bg-gold" />
-              Active &amp; growing across India
+              <span className="inline-flex h-0.5 w-5 rounded-full bg-gold" />
+              Expansion from the Uttarakhand base
             </span>
           </Reveal>
         </div>
@@ -120,21 +121,21 @@ export function StoreNetwork() {
               viewBox={`0 0 ${w} ${h}`}
               className="block h-auto w-full overflow-visible"
               role="img"
-              aria-label={`Map of India showing ${NETWORK_TOTAL} live QuickBasket outlets in Uttarakhand and new locations opening across the country`}
+              aria-label={`Map of India showing ${NETWORK_TOTAL} live QuickBasket outlets across ${NETWORK_STATE_COUNT} states`}
             >
               {/* states assemble in with a soft stagger */}
               <g>
                 {INDIA_STATES.map((s, i) => {
-                  const isUk = s.id === 'uttarakhand'
+                  const isLive = LIVE_IDS.has(s.id)
                   return (
                     <path
                       key={s.id}
                       d={s.d}
-                      className={cn('map-state', !isUk && 'hover:fill-[#eef0e2]')}
+                      className={cn('map-state', !isLive && 'hover:fill-[#eef0e2]')}
                       style={{ transitionDelay: `${i * STATE_STAGGER}ms` }}
-                      fill={isUk ? '#d3ecda' : '#f1eee2'}
-                      stroke={isUk ? 'rgba(10,138,52,0.45)' : '#fcfbf6'}
-                      strokeWidth={isUk ? 1.4 : 0.8}
+                      fill={isLive ? '#d3ecda' : '#f1eee2'}
+                      stroke={isLive ? 'rgba(10,138,52,0.45)' : '#fcfbf6'}
+                      strokeWidth={isLive ? 1.4 : 0.8}
                       strokeLinejoin="round"
                     >
                       <title>{s.name}</title>
@@ -145,7 +146,7 @@ export function StoreNetwork() {
 
               {/* route arcs out of Uttarakhand */}
               <g fill="none">
-                {cities.map((c, i) => {
+                {spokes.map((c, i) => {
                   const d = arcPath(hub.x, hub.y, c.x, c.y)
                   return (
                     <g key={c.name}>
@@ -173,66 +174,44 @@ export function StoreNetwork() {
                 })}
               </g>
 
-              {/* upcoming city markers */}
+              {/* live state markers — radius carries the outlet count */}
               {inView && (
                 <g>
-                  {cities.map((c, i) => (
-                    <g
-                      key={c.name}
-                      onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: 'Active & growing' })}
-                      onMouseLeave={() => setTip(null)}
-                      className="cursor-pointer"
-                    >
-                      <circle
-                        cx={c.x}
-                        cy={c.y}
-                        r={4.4}
-                        className="map-pop"
-                        style={{ animationDelay: `${ARCS_AT + i * ARC_STAGGER + 950}ms` }}
-                        fill="#f58a1a"
-                        stroke="#fff"
-                        strokeWidth={1.6}
-                      />
-                      {/* generous invisible hit area */}
-                      <circle cx={c.x} cy={c.y} r={13} fill="transparent" />
-                    </g>
-                  ))}
-                </g>
-              )}
-
-              {/* live Uttarakhand cluster markers */}
-              {inView && (
-                <g>
-                  {live.map((c, i) => (
-                    <g
-                      key={c.name}
-                      onMouseEnter={() => setTip({ x: c.x, y: c.y, title: c.name, sub: `${c.outlets} outlets live` })}
-                      onMouseLeave={() => setTip(null)}
-                      className="cursor-pointer"
-                    >
-                      <circle
-                        cx={c.x}
-                        cy={c.y}
-                        r={6}
-                        className="map-ping"
-                        style={{ animationDelay: `${MARKERS_AT + i * 160}ms` }}
-                        fill="none"
-                        stroke="#0a8a34"
-                        strokeWidth={1.2}
-                      />
-                      <circle
-                        cx={c.x}
-                        cy={c.y}
-                        r={5}
-                        className="map-pop"
-                        style={{ animationDelay: `${MARKERS_AT + i * 160}ms` }}
-                        fill="#0a8a34"
-                        stroke="#fff"
-                        strokeWidth={1.8}
-                      />
-                      <circle cx={c.x} cy={c.y} r={13} fill="transparent" />
-                    </g>
-                  ))}
+                  {live.map((c, i) => {
+                    const r = 4 + (c.outlets / maxOutlets) * 3.2
+                    return (
+                      <g
+                        key={c.name}
+                        onMouseEnter={() =>
+                          setTip({ x: c.x, y: c.y, title: c.name, sub: `${c.outlets} outlets live` })
+                        }
+                        onMouseLeave={() => setTip(null)}
+                        className="cursor-pointer"
+                      >
+                        <circle
+                          cx={c.x}
+                          cy={c.y}
+                          r={r + 1.2}
+                          className="map-ping"
+                          style={{ animationDelay: `${MARKERS_AT + i * 140}ms` }}
+                          fill="none"
+                          stroke="#0a8a34"
+                          strokeWidth={1.2}
+                        />
+                        <circle
+                          cx={c.x}
+                          cy={c.y}
+                          r={r}
+                          className="map-pop"
+                          style={{ animationDelay: `${MARKERS_AT + i * 140}ms` }}
+                          fill="#0a8a34"
+                          stroke="#fff"
+                          strokeWidth={1.8}
+                        />
+                        <circle cx={c.x} cy={c.y} r={14} fill="transparent" />
+                      </g>
+                    )
+                  })}
                 </g>
               )}
 
@@ -252,15 +231,15 @@ export function StoreNetwork() {
                     strokeWidth={1}
                   />
                   <g transform={`translate(${hub.x + 22}, ${hub.y - 56})`}>
-                    <rect width={158} height={34} rx={17} fill="#0a8a34" />
+                    <rect width={168} height={34} rx={17} fill="#0a8a34" />
                     <text
-                      x={79}
+                      x={84}
                       y={22}
                       textAnchor="middle"
                       fill="#fff"
                       style={{ font: '700 13.5px Manrope, sans-serif' }}
                     >
-                      Uttarakhand · {NETWORK_TOTAL} live
+                      {NETWORK_TOTAL} live · {NETWORK_STATE_COUNT} states
                     </text>
                   </g>
                 </g>
@@ -283,7 +262,7 @@ export function StoreNetwork() {
             </div>
 
             <p className="mt-3 text-center text-[0.74rem] text-fg3">
-              City markers are representative as new locations come online.
+              Markers sit at a representative point in each live state.
             </p>
           </div>
         </Reveal>

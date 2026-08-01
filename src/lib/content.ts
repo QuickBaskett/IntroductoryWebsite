@@ -152,6 +152,15 @@ export const OMC_PARTNERS = [
   { abbr: 'BPCL', logo: asset('bpcl-logo.svg'), name: 'Bharat Petroleum', note: 'A Maharatna PSU bringing prime highway and city forecourt sites.', color: '#0067b1' },
 ]
 
+/* Brand & supply-side partners. No official logos on hand, so these render
+   as wordmark cards — swap in artwork if the partners provide it. */
+export const STRATEGIC_PARTNERS = [
+  { name: 'Food on Wheels', kind: 'Food services', note: 'On-the-go food formats built for forecourt footfall.' },
+  { name: 'Doon Food Manufacturer', kind: 'Manufacturing', note: 'Regional food production out of Dehradun — short, fresh supply lines.' },
+  { name: 'ITC', kind: 'FMCG brands', note: 'One of India’s largest FMCG houses — the everyday names shoppers look for.' },
+  { name: 'Vadilal', kind: 'Frozen & dairy', note: 'A household ice-cream and frozen-foods brand for the cold aisle.' },
+]
+
 export const OMC_PROOF = [
   { b: 'Up to 35%', t: 'below-market rent on prime sites' },
   { b: 'PSU Maharatna', t: 'backing you can trust' },
@@ -349,62 +358,83 @@ export const NBO_POOL = [
 ]
 
 /* ── Store network map (#network) ─────────────────────────────
-   Live clusters come from the outlet tracker ("Quickbasket
-   Rebranding.xlsx" — Dehradun / Haridwar / Tehri Block sheets).
-   NETWORK_CITIES are representative pan-India points — edit
-   freely as the network grows; exact addresses aren't needed. */
+   The six states QuickBasket currently trades in, ordered by outlet
+   count (they sum to NETWORK_TOTAL). `id` must match a state id in
+   indiaMap.ts so the map can shade the live states. lat/lng place the
+   marker — a representative point in each state, not a centroid.
+   Uttarakhand's 43 come from the outlet tracker ("Quickbasket
+   Rebranding.xlsx" — Dehradun 17 / Haridwar 13 / Tehri Block 13). */
 
-export type NetworkCluster = {
+export type NetworkState = {
   name: string
+  id: string
   outlets: number
   lat: number
   lng: number
   sub: string
 }
 
-export const NETWORK_LIVE: NetworkCluster[] = [
+export const NETWORK_LIVE: NetworkState[] = [
   {
-    name: 'Dehradun',
-    outlets: 17,
-    lat: 30.32,
-    lng: 78.03,
-    sub: 'HPCL & IOCL forecourts, Rishikesh, Sahastradhara Road',
+    name: 'Uttarakhand',
+    id: 'uttarakhand',
+    outlets: 43,
+    lat: 30.2,
+    lng: 78.3,
+    sub: 'Home state — Dehradun, Haridwar, Roorkee & Tehri Garhwal',
   },
   {
-    name: 'Haridwar & Roorkee',
-    outlets: 13,
-    lat: 29.95,
-    lng: 78.16,
-    sub: 'Highway carts across Narsan, Laksar & Roorkee',
+    name: 'Himachal Pradesh',
+    id: 'himachal-pradesh',
+    outlets: 30,
+    lat: 31.1,
+    lng: 77.17,
+    sub: 'Hill-highway forecourts on the Shimla and Manali routes',
   },
   {
-    name: 'Tehri Garhwal',
-    outlets: 13,
-    lat: 30.38,
-    lng: 78.48,
-    sub: 'Kempty Falls, Tehri Dam, Chamba & Devprayag',
+    name: 'Haryana',
+    id: 'haryana',
+    outlets: 24,
+    lat: 29.2,
+    lng: 76.3,
+    sub: 'National-highway corridors and satellite-town forecourts',
+  },
+  {
+    name: 'Uttar Pradesh',
+    id: 'uttar-pradesh',
+    outlets: 20,
+    lat: 26.85,
+    lng: 80.95,
+    sub: 'Expressway and city sites across the state',
+  },
+  {
+    name: 'Delhi / NCR',
+    id: 'nct-of-delhi',
+    outlets: 18,
+    lat: 28.61,
+    lng: 77.21,
+    sub: 'Dense urban forecourts across the capital region',
+  },
+  {
+    name: 'Telangana',
+    id: 'telangana',
+    outlets: 15,
+    lat: 17.38,
+    lng: 78.49,
+    sub: 'Our southern beachhead, anchored on Hyderabad',
   },
 ]
 
 export const NETWORK_TOTAL = NETWORK_LIVE.reduce((n, c) => n + c.outlets, 0)
 
-/** Stores active nationwide — beyond the Uttarakhand outlets mapped above. */
-export const NETWORK_ACTIVE_STORES = '150+'
+/** Live states — drives both the map shading and the proof strip. */
+export const NETWORK_STATE_COUNT = NETWORK_LIVE.length
 
-export const NETWORK_CITIES: { name: string; lat: number; lng: number }[] = [
-  { name: 'Delhi NCR', lat: 28.61, lng: 77.21 },
-  { name: 'Chandigarh', lat: 30.73, lng: 76.78 },
-  { name: 'Jaipur', lat: 26.91, lng: 75.79 },
-  { name: 'Lucknow', lat: 26.85, lng: 80.95 },
-  { name: 'Ahmedabad', lat: 23.02, lng: 72.57 },
-  { name: 'Mumbai', lat: 19.08, lng: 72.88 },
-  { name: 'Hyderabad', lat: 17.38, lng: 78.49 },
-  { name: 'Bengaluru', lat: 12.97, lng: 77.59 },
-  { name: 'Kolkata', lat: 22.57, lng: 88.36 },
-]
+/** Stores active nationwide. */
+export const NETWORK_ACTIVE_STORES = '150+'
 
 export const NETWORK_PROOF = [
   { b: NETWORK_ACTIVE_STORES, t: 'Stores already active across India' },
-  { b: `${NETWORK_TOTAL}`, t: 'Outlets mapped across 3 Uttarakhand districts' },
+  { b: `${NETWORK_STATE_COUNT}`, t: 'Active states, and counting' },
   { b: '150k+', t: 'Forecourts across India to grow into' },
 ] as const
