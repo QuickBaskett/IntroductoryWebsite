@@ -15,8 +15,8 @@ export const ZOHO_ENDPOINT = 'https://crm.zoho.in/crm/WebToContactForm'
 
 /** Hidden fields Zoho requires on every submission. Do not rename. */
 export const ZOHO_HIDDEN_FIELDS: Record<string, string> = {
-  xnQsjsdp: '40b3965de010d9ddb008677d30c3228e301b0eed27acd0c59481398568928b78',
-  xmIwtLD: '313cec56ba5ddf018278ee5d489e48477a914cb0af3130d4aa93d3018860ae86ed9edcb1dff2a0800f3f944b3b1d2036',
+  xnQsjsdp: '2cbc7b8baff10379915229bba11aa44847ed02bc6989ca9b99312410d862b6ef',
+  xmIwtLD: 'd72d3906e3a9e2de2d4469164515d3197d1389e63de37c33f2fb77e0fca11f5c6f3e43d8249e6bf697a4a3b6aeb09aa0',
   actionType: 'Q29udGFjdHM=', // base64 "Contacts"
   returnURL: 'null',
   zc_gad: '',
