@@ -164,10 +164,10 @@ export const STRATEGIC_PARTNERS: Partner[] = [
     logo: asset('itc-logo.svg'),
   },
   {
-    name: 'Bikanervala',
-    kind: 'Sweets & namkeen',
-    note: 'A household name in Indian sweets and savoury snacking.',
-    logo: asset('bikanervala-logo.png'),
+    name: 'Bikaner Bites',
+    kind: 'Sweets & bakery',
+    note: 'Sweets, bakes and savoury snacking made for the impulse aisle.',
+    logo: asset('bikaner-bites-logo.png'),
   },
   {
     name: 'Vadilal',
@@ -185,11 +185,7 @@ export const STRATEGIC_PARTNERS: Partner[] = [
     name: 'Food on Wheels',
     kind: 'Food services',
     note: 'On-the-go food formats built for forecourt footfall.',
-  },
-  {
-    name: 'Doon Food Manufacturer',
-    kind: 'Manufacturing',
-    note: 'Regional food production out of Dehradun — short, fresh supply lines.',
+    logo: asset('food-on-wheels-logo.png'),
   },
 ]
 
