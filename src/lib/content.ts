@@ -152,13 +152,59 @@ export const OMC_PARTNERS = [
   { abbr: 'BPCL', logo: asset('bpcl-logo.svg'), name: 'Bharat Petroleum', note: 'A Maharatna PSU bringing prime highway and city forecourt sites.', color: '#0067b1' },
 ]
 
-/* Brand & supply-side partners. No official logos on hand, so these render
-   as wordmark cards — swap in artwork if the partners provide it. */
-export const STRATEGIC_PARTNERS = [
-  { name: 'Food on Wheels', kind: 'Food services', note: 'On-the-go food formats built for forecourt footfall.' },
-  { name: 'Doon Food Manufacturer', kind: 'Manufacturing', note: 'Regional food production out of Dehradun — short, fresh supply lines.' },
-  { name: 'ITC', kind: 'FMCG brands', note: 'One of India’s largest FMCG houses — the everyday names shoppers look for.' },
-  { name: 'Vadilal', kind: 'Frozen & dairy', note: 'A household ice-cream and frozen-foods brand for the cold aisle.' },
+/* Brand & supply-side partners, shown in the #omc carousel. `logo` is
+   optional — partners without artwork fall back to a wordmark plate. */
+export type Partner = { name: string; kind: string; note: string; logo?: string }
+
+export const STRATEGIC_PARTNERS: Partner[] = [
+  {
+    name: 'ITC',
+    kind: 'FMCG brands',
+    note: 'One of India’s largest FMCG houses — the everyday names shoppers look for.',
+    logo: asset('itc-logo.svg'),
+  },
+  {
+    name: 'Bikanervala',
+    kind: 'Sweets & namkeen',
+    note: 'A household name in Indian sweets and savoury snacking.',
+    logo: asset('bikanervala-logo.png'),
+  },
+  {
+    name: 'Vadilal',
+    kind: 'Frozen & dairy',
+    note: 'A household ice-cream and frozen-foods brand for the cold aisle.',
+    logo: asset('vadilal-logo.png'),
+  },
+  {
+    name: 'STPI',
+    kind: 'Technology',
+    note: 'Software Technology Parks of India — technology and incubation support.',
+    logo: asset('stpi-logo.svg'),
+  },
+  {
+    name: 'Food on Wheels',
+    kind: 'Food services',
+    note: 'On-the-go food formats built for forecourt footfall.',
+  },
+  {
+    name: 'Doon Food Manufacturer',
+    kind: 'Manufacturing',
+    note: 'Regional food production out of Dehradun — short, fresh supply lines.',
+  },
+]
+
+/* Government programmes behind the business. */
+export const GOVT_SUPPORT = [
+  {
+    name: 'Startup India',
+    logo: asset('startup-india-logo.png'),
+    note: 'The Government of India’s national startup programme.',
+  },
+  {
+    name: 'DAY-NRLM · Aajeevika',
+    logo: asset('nrlm-logo.png'),
+    note: 'The Ministry of Rural Development’s rural livelihoods mission.',
+  },
 ]
 
 export const OMC_PROOF = [

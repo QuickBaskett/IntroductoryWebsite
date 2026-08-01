@@ -1,5 +1,6 @@
-import { OMC_PARTNERS, OMC_PROOF, STRATEGIC_PARTNERS } from '../lib/content'
+import { GOVT_SUPPORT, OMC_PARTNERS, OMC_PROOF, STRATEGIC_PARTNERS } from '../lib/content'
 import { SectionHeading } from './SectionHeading'
+import { PartnerCarousel } from './PartnerCarousel'
 import { Reveal } from './Reveal'
 
 export function OmcPartners() {
@@ -65,23 +66,38 @@ export function OmcPartners() {
         </p>
       </Reveal>
 
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {STRATEGIC_PARTNERS.map((p, i) => (
-          <Reveal key={p.name} delay={i * 70}>
-            <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-black/[0.07] bg-panel p-6 shadow-[0_18px_44px_-30px_rgba(11,61,30,0.28)] transition-[transform,border-color] duration-300 hover:-translate-y-1.5 hover:border-gold/35">
-              <div className="mb-5 flex h-20 items-center justify-center rounded-xl border border-black/[0.05] bg-gradient-to-b from-white to-ink2 px-4">
-                <span className="text-center font-display text-[1.12rem] leading-tight font-bold tracking-[-0.02em] text-fg">
-                  {p.name}
-                </span>
+      <Reveal delay={60} className="mt-10">
+        <PartnerCarousel items={STRATEGIC_PARTNERS} />
+      </Reveal>
+
+      {/* ── Government backing ── */}
+      <Reveal delay={80} className="mt-20 overflow-hidden rounded-3xl border border-acid/15 bg-[linear-gradient(180deg,#ffffff,#f3f0e6)] px-8 py-10">
+        <p className="mb-6 flex items-center justify-center gap-2.5 text-center font-mono text-[0.72rem] tracking-[0.2em] text-fg2 uppercase">
+          <span className="size-[7px] rounded-full bg-acid shadow-[0_0_10px_var(--color-acid)]" />
+          Supported by the Government of India
+        </p>
+        <div className="mx-auto grid max-w-[760px] grid-cols-1 gap-5 sm:grid-cols-2">
+          {GOVT_SUPPORT.map((g) => (
+            <div
+              key={g.name}
+              className="flex items-center gap-5 rounded-2xl border border-black/[0.06] bg-panel px-5 py-4"
+            >
+              <div className="flex size-20 shrink-0 items-center justify-center rounded-xl border border-black/[0.05] bg-white p-2.5">
+                <img
+                  src={g.logo}
+                  alt={`${g.name} logo`}
+                  loading="lazy"
+                  className="max-h-full w-auto max-w-full object-contain"
+                />
               </div>
-              <span className="mb-2 inline-block font-mono text-[0.64rem] font-bold tracking-[0.14em] text-gold uppercase">
-                {p.kind}
-              </span>
-              <p className="text-[0.88rem] text-fg2">{p.note}</p>
-            </article>
-          </Reveal>
-        ))}
-      </div>
+              <div>
+                <h4 className="font-display text-[1.02rem] leading-tight font-bold">{g.name}</h4>
+                <p className="mt-1 text-[0.84rem] text-fg2">{g.note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Reveal>
     </section>
   )
 }
