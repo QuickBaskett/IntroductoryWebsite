@@ -107,7 +107,7 @@ export function DemoForm() {
           value={values[FIELD.firstName]}
           maxLength={MAXLEN[FIELD.firstName]}
           autoComplete="given-name"
-          placeholder="Kshitij"
+          placeholder="John"
           onChange={(v) => set(FIELD.firstName, v)}
         />
         <Field
@@ -118,7 +118,7 @@ export function DemoForm() {
           value={values[FIELD.lastName]}
           maxLength={MAXLEN[FIELD.lastName]}
           autoComplete="family-name"
-          placeholder="Agarwal"
+          placeholder="Doe"
           onChange={(v) => set(FIELD.lastName, v)}
         />
       </div>
