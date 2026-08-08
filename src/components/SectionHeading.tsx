@@ -23,7 +23,7 @@ export function SectionHeading({ kicker, title, lede, center }: Props) {
         <span className="inline-block size-2 rounded-[3px] bg-gold" /> {kicker}
       </Reveal>
       <Reveal delay={60}>
-        <h2 className="font-display text-[clamp(1.9rem,4.6vw,3.5rem)] leading-[1.03] font-semibold tracking-[-0.02em]">
+        <h2 className="font-display text-[clamp(1.9rem,4.6vw,3.4rem)] leading-[1.06] font-semibold tracking-[-0.01em]">
           {title}
         </h2>
       </Reveal>

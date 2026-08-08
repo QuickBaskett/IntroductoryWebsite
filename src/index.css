@@ -25,9 +25,9 @@
   --color-fg3: #86917f;    /* faint */
 
   /* fonts */
-  --font-display: 'Bricolage Grotesque', ui-serif, serif;
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
 

@@ -6,6 +6,7 @@ import { MarketOpportunity } from './components/MarketOpportunity'
 import { StoreFormat } from './components/StoreFormat'
 import { OmcPartners } from './components/OmcPartners'
 import { StoreNetwork } from './components/StoreNetwork'
+import { Impact } from './components/Impact'
 import { Platform } from './components/Platform'
 import { Audience } from './components/Audience'
 import { Intelligence } from './components/Intelligence'
@@ -36,6 +37,7 @@ export default function App() {
         <StoreFormat />
         <OmcPartners />
         <StoreNetwork />
+        <Impact />
         <Platform />
         <Audience />
         <Intelligence />

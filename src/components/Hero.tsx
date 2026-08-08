@@ -17,7 +17,7 @@ export function Hero() {
             QuickBasket · Fast. Fresh. To Your Doorstep.
           </Reveal>
 
-          <h1 className="my-6 font-display text-[clamp(2.6rem,7vw,5.4rem)] leading-[0.98] font-semibold tracking-[-0.03em]">
+          <h1 className="my-6 font-display text-[clamp(2.6rem,7vw,5.2rem)] leading-[1.02] font-semibold tracking-[-0.02em]">
             <Reveal as="span" className="block">
               Fresh groceries,
             </Reveal>

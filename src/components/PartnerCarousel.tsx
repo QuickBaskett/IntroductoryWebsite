@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Partner } from '../lib/content'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import { ReelDialog } from './ReelDialog'
 import { cn } from '../lib/cn'
 
 const AUTOPLAY_MS = 3800
@@ -16,6 +17,7 @@ export function PartnerCarousel({ items }: { items: Partner[] }) {
   const [index, setIndex] = useState(0)
   const [pages, setPages] = useState(1)
   const [paused, setPaused] = useState(false)
+  const [reelOf, setReelOf] = useState<Partner | null>(null)
   const reduce = useReducedMotion()
 
   /** Width of one card plus the flex gap. */
@@ -125,6 +127,16 @@ export function PartnerCarousel({ items }: { items: Partner[] }) {
               {p.kind}
             </span>
             <p className="text-[0.88rem] text-fg2">{p.note}</p>
+            {p.reel && (
+              <button
+                type="button"
+                onClick={() => setReelOf(p)}
+                className="mt-auto inline-flex items-center gap-1.5 self-start pt-3 text-[0.84rem] font-bold text-gold transition-colors duration-300 hover:text-gold2"
+                data-testid={`partner-reel-open-${p.name.toLowerCase().replaceAll(' ', '-')}`}
+              >
+                <span aria-hidden>▸</span> Watch their reel
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -155,6 +167,8 @@ export function PartnerCarousel({ items }: { items: Partner[] }) {
           →
         </Arrow>
       </div>
+
+      <ReelDialog partner={reelOf} onClose={() => setReelOf(null)} />
     </div>
   )
 }

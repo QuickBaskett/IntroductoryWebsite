@@ -10,6 +10,7 @@ export const NAV_LINKS = [
   { label: 'The Store', href: '#store' },
   { label: 'Partners', href: '#omc' },
   { label: 'Network', href: '#network' },
+  { label: 'Community', href: '#impact' },
   { label: 'The Model', href: '#model' },
   { label: 'Watch', href: '#video' },
 ] as const
@@ -153,8 +154,16 @@ export const OMC_PARTNERS = [
 ]
 
 /* Brand & supply-side partners, shown in the #omc carousel. `logo` is
-   optional — partners without artwork fall back to a wordmark plate. */
-export type Partner = { name: string; kind: string; note: string; logo?: string }
+   optional — partners without artwork fall back to a wordmark plate; `reel`
+   adds a "watch" affordance that opens the partner's promo film. */
+export type Partner = {
+  name: string
+  kind: string
+  note: string
+  logo?: string
+  reel?: string
+  reelPoster?: string
+}
 
 export const STRATEGIC_PARTNERS: Partner[] = [
   {
@@ -186,6 +195,8 @@ export const STRATEGIC_PARTNERS: Partner[] = [
     kind: 'Food services',
     note: 'On-the-go food formats built for forecourt footfall.',
     logo: asset('food-on-wheels-logo.png'),
+    reel: asset('fow-reel.mp4'),
+    reelPoster: asset('fow-poster.jpg'),
   },
 ]
 
@@ -366,6 +377,44 @@ export const KPIS = [
   { d: '↑', s: 'Vendor reliability', p: 'Order from partners who deliver.' },
   { d: '↓', s: 'Time to reporting', p: 'Chain-wide answers in seconds.' },
 ]
+
+/* ── Women-led community impact (#impact) ─────────────────────
+   The people story behind the stores: SHG-run kiosks, Uttarakhand
+   produce, and the proposal film made for the state livelihoods
+   mission (USRLM). */
+
+export const IMPACT_PILLARS = [
+  {
+    b: 'Run by women, owned by the community',
+    t: 'Kiosks are operated by rural women and self-help groups — training, steady income and real ownership that stays in the community.',
+  },
+  {
+    b: 'Local products, bigger markets',
+    t: 'Mandua ragi, jhangora, Himalayan honey, herbal care and handicrafts move from hill producers straight to highway and city shoppers.',
+  },
+  {
+    b: 'Built with the livelihoods mission',
+    t: 'Designed alongside DAY-NRLM and the Uttarakhand State Rural Livelihoods Mission, so every store doubles as a rural enterprise.',
+  },
+] as const
+
+/** Shelf highlights floated over the store photograph. */
+export const IMPACT_CHIPS = ['Millets', 'Himalayan honey', 'Herbal & natural', 'Handicrafts'] as const
+
+export const IMPACT_FILM = {
+  src: asset('usrlm-film.mp4'),
+  poster: asset('usrlm-poster.jpg'),
+  duration: '5 min',
+} as const
+
+/** What an EV Café site offers, chip-listed over the concept photo. */
+export const EV_AMENITIES = [
+  'Fast EV charging',
+  'Café & refreshments',
+  'Free Wi-Fi',
+  'Rest area',
+  'Clean & safe',
+] as const
 
 export const FUTURE = [
   { h: 'EV Café Lounge', p: 'Turn EV charging downtime into a destination — café, Wi-Fi and shopping while you charge. India needs 100,000+ charge points by 2030; the OMCs alone are adding 22,000+.' },

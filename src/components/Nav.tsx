@@ -45,12 +45,12 @@ export function Nav() {
     >
       <a href="#top" className="flex items-center gap-2.5" aria-label="QuickBasket home">
         <BrandMark size={34} />
-        <span className="font-display text-[1.28rem] font-extrabold tracking-[-0.02em] text-gold">
+        <span className="font-body text-[1.28rem] font-extrabold tracking-[-0.02em] text-gold">
           Quick<span className="text-acid">Basket</span>
         </span>
       </a>
 
-      <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+      <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
         {NAV_LINKS.map((l) => (
           <a
             key={l.href}
