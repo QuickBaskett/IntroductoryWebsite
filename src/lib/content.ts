@@ -8,9 +8,9 @@ import { asset } from './asset'
 export const NAV_LINKS = [
   { label: 'Opportunity', href: '#market' },
   { label: 'The Store', href: '#store' },
-  { label: 'Partners', href: '#omc' },
-  { label: 'Network', href: '#network' },
-  { label: 'The Model', href: '#model' },
+  { label: 'Partners', href: '#story' },
+  { label: 'Network', href: '#store' },
+  { label: 'The Model', href: '#contact' },
   { label: 'Watch', href: '#video' },
 ] as const
 
@@ -374,9 +374,9 @@ export const FUTURE = [
 ]
 
 export const FOOTER_COLS = [
-  { h: 'Platform', links: [['What it does', '#platform'], ['Who it’s for', '#audience'], ['Intelligence', '#intelligence']] },
-  { h: 'Why QuickBasket', links: [['Built for scale', '#architecture'], ['How it works', '#flow'], ['Trust & security', '#security']] },
-  { h: 'Company', links: [['Your rollout', '#roadmap'], ['Where we’re headed', '#future'], ['Talk to us', '#contact']] },
+  { h: 'Explore', links: [['The opportunity', '#market'], ['The story', '#story'], ['The stores', '#store']] },
+  { h: 'Discover', links: [['Watch the story', '#video'], ['Where we’re headed', '#future'], ['Contact us', '#contact']] },
+  { h: 'QuickBasket', links: [['Back to top', '#top'], ['Our mission', '#story'], ['Partner with us', '#contact']] },
 ] as const
 
 /* Checkout demo data */

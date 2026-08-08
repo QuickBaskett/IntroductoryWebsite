@@ -39,7 +39,7 @@ export function StoreFormat() {
 
         <Reveal delay={120} className="order-1 lg:order-2">
           <figure className="relative overflow-hidden rounded-3xl border border-black/[0.06] shadow-[0_34px_70px_-34px_rgba(11,61,30,0.4)]">
-            <img
+            <img data-testid="store-hero-image"
               src={asset('store-pump-iocl.jpg')}
               alt="A glowing QuickBasket kiosk beside the fuel pumps at an IOCL petrol station at night"
               className="aspect-[16/11] w-full object-cover"
@@ -63,7 +63,7 @@ export function StoreFormat() {
             key={g.src}
             className="group relative overflow-hidden rounded-2xl border border-black/[0.06] shadow-[0_20px_44px_-30px_rgba(11,61,30,0.35)]"
           >
-            <img
+            <img data-testid={`store-gallery-image-${g.cap.toLowerCase().replaceAll(' ', '-')}`}
               src={g.src}
               alt={`QuickBasket store — ${g.cap}`}
               className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"

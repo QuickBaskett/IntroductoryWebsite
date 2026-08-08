@@ -43,7 +43,7 @@ export function Nav() {
           : 'border-b border-transparent py-4',
       )}
     >
-      <a href="#top" className="flex items-center gap-2.5" aria-label="QuickBasket home">
+      <a href="#top" className="flex items-center gap-2.5" aria-label="QuickBasket home" data-testid="primary-nav-home-link">
         <BrandMark size={34} />
         <span className="font-display text-[1.28rem] font-extrabold tracking-[-0.02em] text-gold">
           Quick<span className="text-acid">Basket</span>
@@ -59,6 +59,7 @@ export function Nav() {
               'group relative py-0.5 text-[0.9rem] font-medium transition-colors',
               active === l.href.slice(1) ? 'text-fg' : 'text-fg2 hover:text-fg',
             )}
+            data-testid={`primary-nav-link-${l.label.toLowerCase().replaceAll(' ', '-')}`}
           >
             {l.label}
             <span
@@ -72,7 +73,7 @@ export function Nav() {
       </nav>
 
       <div className="hidden items-center gap-2.5 lg:flex">
-        <DemoTrigger className="rounded-full bg-gold px-5 py-2.5 text-[0.9rem] font-bold text-white shadow-[0_10px_26px_-8px_rgba(245,138,26,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold2">
+        <DemoTrigger className="rounded-full bg-gold px-5 py-2.5 text-[0.9rem] font-bold text-white shadow-[0_10px_26px_-8px_rgba(245,138,26,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold2" data-testid="primary-nav-contact-button">
           Contact Us
         </DemoTrigger>
       </div>
@@ -83,6 +84,7 @@ export function Nav() {
         aria-label="Toggle menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
+        data-testid="mobile-menu-toggle"
       >
         <span
           className={cn('h-0.5 w-6 bg-fg transition-transform duration-300', open && 'translate-y-2 rotate-45')}
@@ -107,6 +109,7 @@ export function Nav() {
               href={l.href}
               onClick={() => setOpen(false)}
               className="text-[1.05rem] font-medium text-fg2 hover:text-acid"
+              data-testid={`mobile-nav-link-${l.label.toLowerCase().replaceAll(' ', '-')}`}
             >
               {l.label}
             </a>
@@ -114,6 +117,7 @@ export function Nav() {
           <DemoTrigger
             onClick={() => setOpen(false)}
             className="mt-2 rounded-full bg-gold px-5 py-3 text-center font-bold text-white"
+            data-testid="mobile-contact-button"
           >
             Contact Us
           </DemoTrigger>
