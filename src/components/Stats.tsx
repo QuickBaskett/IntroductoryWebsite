@@ -17,7 +17,7 @@ function format(value: number, s: Stat): string {
 function StatItem({ stat, active }: { stat: Stat; active: boolean }) {
   const value = useCountUp(stat.target, active)
   return (
-    <div className="bg-ink2 px-6 py-8" data-testid={`impact-stat-${stat.label.toLowerCase().replaceAll(' ', '-')}`}>
+    <div className="bg-ink2 px-6 py-8">
       <div className="font-display text-[clamp(1.8rem,3.5vw,2.9rem)] leading-none font-bold tracking-[-0.02em] text-acid">
         {format(value, stat)}
       </div>
@@ -35,9 +35,9 @@ export function Stats() {
     <section id="stats" className="px-[clamp(1.1rem,4vw,2.6rem)]">
       <div
         ref={ref}
-        className="mx-auto mt-8 grid max-w-[1200px] grid-cols-2 gap-px overflow-hidden rounded-2xl border border-black/[0.07] bg-black/[0.06] sm:grid-cols-3 lg:grid-cols-4"
+        className="mx-auto mt-8 grid max-w-[1200px] grid-cols-2 gap-px overflow-hidden rounded-2xl border border-black/[0.07] bg-black/[0.06] sm:grid-cols-3 lg:grid-cols-5"
       >
-        {STATS.slice(0, 4).map((s) => (
+        {STATS.map((s) => (
           <StatItem key={s.label} stat={s} active={inView} />
         ))}
       </div>

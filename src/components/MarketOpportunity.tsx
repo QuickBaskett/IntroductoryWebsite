@@ -20,7 +20,7 @@ export function MarketOpportunity() {
       <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
         {MARKET_POINTS.map((p, i) => (
           <Reveal key={p.b} delay={i * 80}>
-            <article data-testid={`opportunity-card-${i + 1}`} className="h-full rounded-2xl border border-black/[0.06] bg-panel p-8 text-center shadow-[0_18px_44px_-30px_rgba(11,61,30,0.3)] transition-[transform,border-color] duration-300 hover:-translate-y-1.5 hover:border-acid/25">
+            <article className="h-full rounded-2xl border border-black/[0.06] bg-panel p-8 text-center shadow-[0_18px_44px_-30px_rgba(11,61,30,0.3)] transition-[transform,border-color] duration-300 hover:-translate-y-1.5 hover:border-acid/25">
               <div className="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-acid/[0.08] text-[1.7rem]">
                 {p.ic}
               </div>

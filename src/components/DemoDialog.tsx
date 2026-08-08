@@ -41,7 +41,6 @@ export function DemoDialog() {
 
   return (
     <div
-      data-testid="contact-dialog"
       className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-[rgba(23,37,26,0.5)] px-4 py-[max(1.5rem,4vh)] backdrop-blur-sm motion-safe:animate-panel-in"
       onClick={(e) => {
         if (e.target === e.currentTarget) setOpen(false)
@@ -75,7 +74,6 @@ export function DemoDialog() {
             onClick={() => setOpen(false)}
             aria-label="Close"
             className="-mt-1 -mr-1 grid size-9 shrink-0 place-items-center rounded-full border border-black/[0.07] bg-black/[0.02] text-fg2 transition-colors duration-300 hover:border-acid hover:text-acid"
-            data-testid="contact-dialog-close-button"
           >
             ✕
           </button>

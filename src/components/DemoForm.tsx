@@ -97,7 +97,7 @@ export function DemoForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4 px-6 py-6" data-testid="contact-form">
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4 px-6 py-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field
           id={`${uid}-first`}
@@ -170,7 +170,6 @@ export function DemoForm() {
             id={`${uid}-state`}
             value={values[FIELD.state]}
             onChange={(e) => set(FIELD.state, e.target.value)}
-            data-testid="contact-form-state-select"
             aria-invalid={Boolean(errors[FIELD.state])}
             className={cn(
               inputCls,
@@ -202,7 +201,6 @@ export function DemoForm() {
             setConsent(e.target.checked)
             if (e.target.checked) setErrors((v) => ({ ...v, consent: undefined }))
           }}
-          data-testid="contact-form-consent-checkbox"
           className="mt-0.5 size-4 shrink-0 accent-[var(--color-acid)]"
         />
         <span className="text-[0.85rem] leading-relaxed text-fg2">
@@ -223,7 +221,6 @@ export function DemoForm() {
       <button
         type="submit"
         disabled={busy}
-        data-testid="contact-form-submit-button"
         className={cn(
           'mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 py-3.5 font-bold text-white',
           'shadow-[0_10px_28px_-6px_rgba(245,138,26,0.55)] transition-all duration-300',
@@ -290,7 +287,6 @@ function Field({ id, label, value, onChange, error, required, ...rest }: FieldPr
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        data-testid={`contact-form-${id.split('-').at(-1)}-input`}
         aria-invalid={Boolean(error)}
         className={cn(inputCls, error && 'border-red-400 focus:border-red-400 focus:ring-red-200')}
       />
